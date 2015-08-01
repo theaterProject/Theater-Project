@@ -1,0 +1,50 @@
+//Matt Birtwistle
+//Theater Ticket Sales
+
+#include <iostream>
+using namespace std;
+
+
+int main()
+{
+
+	int choice = 0;
+	
+	while (choice != 4)
+	{ 
+
+		cout << "\n             WELCOME TO THE THEATER" << endl;
+		cout << "\n   Please choose an option from the menu below : " << endl;
+		cout << "\n\n             1 -  Seating Chart" << endl;
+		cout << "             2 -  Request Tickets" << endl;
+		cout << "             3 -  Print sales report" << endl;
+		cout << "             4 -  Exit\n\n" << endl;
+
+		cout << "\n         MENU CHOICE:  ";
+
+		cin >> choice;
+
+		if ((choice != 1) && (choice != 2) && (choice !=3) && (choice != 4))
+		{
+			cout << "\n\n   Invalid option, please enter a valid menu option:  ";
+			cin >> choice;
+		}
+
+		switch (choice)
+		{ 
+		case 1:   ;		//Insert seating chart function
+			break;
+		case 2:   ;		//Insert Request Ticket function
+			break;
+		case 3:   ;		//Insert Sales Report function
+			break;
+		default: cout << "\n\n                 Program Exited\n\n";
+		}
+			
+	}
+
+	
+
+
+	return 0;
+}
