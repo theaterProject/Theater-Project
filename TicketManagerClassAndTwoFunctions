@@ -1,0 +1,320 @@
+// Justin Flintrop - Class Project - TicketManager 
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+//**************************************************************************************************
+// TicketManager Class
+//**************************************************************************************************
+
+class TicketManager
+{
+public:
+	struct SeatStructures				//create seatStructures structure include:
+	{									//Seat Price, Availability, and Sale Status
+		double seatPrice;				//seatPrice variable
+		char seatAvailability;			//seatAvailability set as a char to support # for available and * for taken
+		bool seatSold;					//boolean value to be true if seat is sold.
+	};
+
+
+	SeatStructures seatMap[15][30];		//declare seatMap as a two dimensional array of SeatStructures
+
+	TicketManager(); // Constructor function prototype
+	~TicketManager(); //Destructor function prototype
+	void displaySeatMapFunction(); //displaySeatMap function prototype
+	void editSeatMap(); //test fucntion prototype to edit seat map chars
+	void resetSeatMap(); //function prototype to restore seat map to #
+	int ticketRequest(int, int, int); //function prototype for ticket request
+	//need to add other function prototypes here
+	//and here
+	//and here
+	//TicketManager::~TicketManager(); // destructor placeholder
+
+};
+// *********************************************************************************************
+//			CONTSTRUCTOR                TicketManager::TicketManager
+//**********************************************************************************************
+TicketManager::TicketManager()
+{
+	//*******************************************************************************
+	//                Import Seat Availability
+	//********************************************************************************
+
+	ifstream seatMapImport;			//initialize variable to pull information from dat file "SeatAvailability.dat"
+	string seatMapImportRow[15];   //initialize string array to store each row from dat file
+	seatMapImport.open("SeatAvailability.dat");  //open dat file
+
+	for (int importCount = 0; importCount < 15; importCount++)  //for loop with importCount as counter variable to copy 15 rows to strings
+	{
+		seatMapImport >> seatMapImportRow[importCount];			// assign each row from the dat file as a string in the seatMapImportRow array.
+	}
+
+	/// Nested For loop to follow to copy each string row into the char array for seat structure availability
+	for (int copyAvailabilityRow = 0; copyAvailabilityRow < 15; copyAvailabilityRow++)  //copyAvailabilityRow is counter variable to count outer loop (copying rows)
+	{
+		for (int copyAvailabilitySeats = 0; copyAvailabilitySeats < 30; copyAvailabilitySeats++)   //copyAvailabilitySeats is counter variable to inner loop (copying seat values as # or *)
+		{
+			seatMap[copyAvailabilityRow][copyAvailabilitySeats].seatAvailability = seatMapImportRow[copyAvailabilityRow][copyAvailabilitySeats];  //Set each array position equal to corresponding position in string array.
+		}
+	}
+	seatMapImport.close();
+
+	
+	// END OF SEAT AVAILABILITY
+	//******************************************************************************************************
+	//                                      IMPORT SEAT PRICES
+	//******************************************************************************************************
+
+	ifstream seatPricesImport;		//initialize variable to pull in prices for seats by row
+	double seatRowPrices[15];		//initialize a double array to hold price values for each row
+	seatPricesImport.open("SeatPrices.dat");  //open dat file holding prices for each row
+
+	for (int importPriceCount = 0; importPriceCount < 15; importPriceCount++)  //for loop to pull in values by row - counter is importPriceCount
+	{
+		seatPricesImport >> seatRowPrices[importPriceCount];          //pull row price and assign it to double array: seatRowPrices
+	}
+	seatPricesImport.close();
+
+	// Assign values from seatRowPrices array into the SeatStructures object
+	for (int priceCopyCountOuter = 0; priceCopyCountOuter < 15; priceCopyCountOuter++) //outer loop to step through rows - priceCopyCountOuter is counter variable
+	{
+		for (int priceCopyCountInner = 0; priceCopyCountInner < 30; priceCopyCountInner++)
+		{
+			seatMap[priceCopyCountOuter][priceCopyCountInner].seatPrice = seatRowPrices[priceCopyCountOuter]; //assign each seat the price for the associated row
+		}
+	}
+
+	// END OF SEAT PRICE IMPORT
+	//**************************************************************************************************************
+	//                      SEAT SALE STATUS
+	//**************************************************************************************************************
+
+	for (int counterOuter = 0; counterOuter < 15; counterOuter++)  //for loop to walk through rows.  counterOuter is the counter variable
+	{
+		for (int counterInner = 0; counterInner < 30; counterInner++)  //for loop to walk through seats.  counterInner is the counter variable
+		{
+			if (seatMap[counterOuter][counterInner].seatAvailability == '*')  //assign boolean value true to seatSold structure member variable if * character is in seat.
+			{
+				seatMap[counterOuter][counterInner].seatSold = true;
+			}
+			else
+			{
+				seatMap[counterOuter][counterInner].seatSold = false;
+			}
+		}
+	}
+
+	cout << "The constructor ran" << endl;  // REMOVE BEFORE SUBMITTING - JUST FOR PROGRAM VERIFICATION
+	
+
+}
+//*************************************************************************************************************
+//     DESTRUCTOR TicketManager::~TicketManager()
+//*************************************************************************************************************
+TicketManager::~TicketManager()
+{
+	ofstream saveSeatMap;						//define ofstream variable to write out to dat file
+	saveSeatMap.open("SeatAvailability.dat");   //open file "SeatAvailability.dat"
+
+	for (int countOuter = 0; countOuter < 15; countOuter++)
+	{
+		for (int countInner = 0; countInner < 30; countInner++)
+		{
+			saveSeatMap << seatMap[countOuter][countInner].seatAvailability;
+		}
+		saveSeatMap << endl;
+	}
+	
+	saveSeatMap.close();					//close file "SeatAvailability.dat"
+
+	cout << "The destructor has run!" << endl; //REMOVE BEFORE SUBMITTING - JUST FOR PROGRAM VERIFICATION
+}
+
+
+//********************************************************************************
+//       display seatMap function
+// **************************************************************
+void TicketManager::displaySeatMapFunction()
+{
+	cout << "                  Seats   "<<endl;
+	cout << "        012345678901234567890123456789" << endl;
+	for (int countOuter1 = 0; countOuter1 < 9; countOuter1++)
+	{
+		cout << "Row " << countOuter1 + 1 << "   ";
+		for (int countInner1 = 0; countInner1 < 30; countInner1++)
+		{
+			//cout statement to format output and display seat availability by printing each member of the two dimensional array
+			cout << seatMap[countOuter1][countInner1].seatAvailability;  //print seat availability
+		}
+
+	    cout << endl;
+
+	}
+	for (int countOuter2=9; countOuter2 < 15; countOuter2++)
+	{
+		cout << "Row " << countOuter2 + 1 << "  ";
+		for (int countInner2 = 0; countInner2 < 30; countInner2++)
+		{
+			cout << seatMap[countOuter2][countInner2].seatAvailability;  //print seat availability
+		}
+		cout << endl;
+	}
+}
+// ***************************************************************************************************
+// TEST FUNCTION TO EDIT SEATMAP FROM MAIN  -- WILL NEED TO BE REMOVED/REPLACED WITH PURCHASE FUNCTION
+// ***************************************************************************************************
+void TicketManager::editSeatMap()
+{
+	int row, seat;
+	cout << "Enter the row number: ";
+	cin >> row;							//obtain values from user for seat row and seat number
+	cout << endl;
+	cout << "Enter the seat number: ";
+	cin >> seat;
+	seatMap[row-1][seat-1].seatAvailability = '*'; //Assign '*' character to indicate it is taken
+	cout << endl;
+	cout << "You have held a seat.  You are in row \n" << row << " and seat number " << seat << ". " << endl; //display message
+	cout << endl;
+
+}
+
+//********************************************************************************************************
+// Reset Seat Map function
+// *******************************************************************************************************
+void TicketManager::resetSeatMap()
+{
+	for (int count1 = 0; count1 < 15; count1++)
+	{
+		for (int count2 = 0; count2 < 30; count2++)
+		{
+			seatMap[count1][count2].seatAvailability = '#';
+		}
+	}
+
+	cout << "The Seat Map has now been reset. " << endl;
+}
+
+
+
+int main()
+{
+	TicketManager object; //declare a TicketManager object - this will kick off the constructor
+
+
+	// ***************************************************************************************
+	//                 TEST CALLING TICKET MANAGER CLASS AND DISPLAY SEATS FUNCTION
+	//****************************************************************************************
+
+	object.displaySeatMapFunction(); //call displaySeatMapFunction 
+	object.editSeatMap();         //call editSeatMap function
+	
+	cout <<  endl;				 //return line for better spacing
+
+	object.displaySeatMapFunction(); //call display seat map function to test changes
+
+	// ******************************************************************************************
+	// Testing request tickets function
+	//******************************************************************************************
+	int requestTickets;  //declare request tickets int for return message
+	cout << "Would you like to request tickets? Enter 1 if yes. " << endl;   //menu option - will be replaced by switch.
+	cin >> requestTickets;
+	if (requestTickets == 1)  //this will kick off what we'd use afte the switch menu number was selected (along with the int requestTickets.)
+	{
+		int rowNumber;
+		int numberOfSeats;                 //Variables for input
+		int startingSeatNumber;
+		int returnMessage;
+
+		cout << "Enter the number of seats you would like to request: " << endl;  //Gather info from user
+		cin >> numberOfSeats;
+		cout << "Enter the row you'd like to request seats from: " << endl;
+		cin >> rowNumber;
+		cout << "Enter the seat number you'd like to start with." << endl;
+		cin >> startingSeatNumber;
+
+		returnMessage = object.ticketRequest(numberOfSeats, rowNumber, startingSeatNumber);
+
+		if (returnMessage == 0)
+		{
+			cout << "One or more of your seats do not exist. " << endl;
+		}
+		else if (returnMessage == 1)
+		{
+			cout << "One or more of your seats are not available. " << endl;
+		}
+		else if (returnMessage == 2)
+		{
+			cout << "Would you like to purchase tickets? No Entry Possible at this point." << endl;
+		}
+
+	}
+
+	//  **********************************************************************************
+	//    MECHANISM TO RESET SEAT MAP TO ALL # *******************************************
+	string reset;
+	cout << "Do you want to reset? Type reset-map if yes:" << endl;
+	cin >> reset;
+	if (reset == "reset-map")
+	{
+		object.resetSeatMap();
+	}
+		
+				
+	return 0;
+
+}
+
+//********************************************************************
+// Ticket Request Function
+//********************************************************************
+int TicketManager::ticketRequest(int numberOfSeats, int rowNumber, int startingSeatNumber)
+{
+	//declare variables
+	int endingSeatNumber = numberOfSeats + startingSeatNumber-1;	//define ending seat number (starting seat number + number of seats - 1) -1 to account for starting seat as one of the number of seats.
+	bool seatExists;												//variable to measure whether or not the seat exists
+	bool seatAvailable;												//variable to measure whether or not the seats are available
+
+	if (endingSeatNumber > 30 || rowNumber>15)  //determine if any seats don't exist by ensuring the Row number is not greater than 15 OR the ending seat number is not greater than 30 (number of seats in a row)
+	{
+		seatExists = false;						//if one of those criteria is met, set seatExists boolean value to false
+	}
+	else
+	{
+		seatExists = true;						//if seats exist, set seatExists boolean value to true
+	}
+
+		//Determine if the seats are available
+		for (int count = 0; count < numberOfSeats; count++)								//initialize a for loop to loop based on the number of seats requested
+			{
+				if (seatMap[rowNumber-1][startingSeatNumber-1].seatAvailability == '#')
+				{																		//check the array position for the row number and startingSeatNumber provided to see if it's value is '#' for available
+					seatAvailable = true;												//if the statement is true, set seatAvailable to true.
+					startingSeatNumber++;												//add 1 to the startingSeatNumber to check the next seat number in the next iteration of the for loop.
+				}
+				else
+				{
+					seatAvailable = false;												//if one of the seats is NOT available, set seatAvailable to false
+					count = numberOfSeats + 1;											// then set count to numberOfSeats+1 to break out of the loop.
+				}
+			}
+		
+		// Begin return statements
+		if (seatAvailable == true && seatExists ==true)					//If the seats exist and are available, print the seats requested, price per seat, and total price.
+		{
+			cout << "You requested " << numberOfSeats << " seats." << endl;
+			cout << "The seats are $" << seatMap[rowNumber][startingSeatNumber].seatPrice << " per seat." << endl;
+			cout << "The total price is $" << seatMap[rowNumber][startingSeatNumber].seatPrice * numberOfSeats << "." << endl;
+			return 2;												//return int value 2 so that the main program can run a statement asking if the user wants to purchase the tickets
+		}
+
+		else if (seatExists == false)								//if seatExists is false, return int value 0 which will kick off appropriate message from main program
+		{
+			return 0;
+		}
+		else
+			return 1;												//if seats exist but are not available, return int value 1 to kick off corresponding message in main program
+
+}
