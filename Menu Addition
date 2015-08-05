@@ -135,19 +135,7 @@ TicketManager::~TicketManager()
 	cout << "The destructor has run!" << endl; //REMOVE BEFORE SUBMITTING - JUST FOR PROGRAM VERIFICATION
 }
 
-//*******************************************************************
-//			DISPLAY MENU FUNCTION
-//******************************************************************
-void displayMenu()
-{
-	cout << "\n             WELCOME TO THE THEATER" << endl;
-	cout << "\n   Please choose an option from the menu below : " << endl;
-	cout << "\n\n             1 -  Seating Chart" << endl;
-	cout << "             2 -  Request Tickets" << endl;
-	cout << "             3 -  Print sales report" << endl;
-	cout << "             4 -  Reset Seat Map and Exit" << endl;
-	cout << "             5 -  Exit\n\n" << endl;
-}
+
 
 //********************************************************************************
 //       display seatMap function
@@ -392,4 +380,18 @@ int TicketManager::ticketRequest(int numberOfSeats, int rowNumber, int startingS
 	else
 		return 1;												//if seats exist but are not available, return int value 1 to kick off corresponding message in main program
 
+}
+
+//*******************************************************************
+//			DISPLAY MENU FUNCTION
+//******************************************************************
+void displayMenu()
+{
+	cout << "\n             WELCOME TO THE THEATER" << endl;
+	cout << "\n   Please choose an option from the menu below : " << endl;
+	cout << "\n\n             1 -  Seating Chart" << endl;
+	cout << "             2 -  Request Tickets" << endl;
+	cout << "             3 -  Print sales report" << endl;
+	cout << "             4 -  Reset Seat Map and Exit" << endl;
+	cout << "             5 -  Exit\n\n" << endl;
 }
