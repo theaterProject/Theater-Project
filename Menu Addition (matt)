@@ -306,10 +306,7 @@ int main()
 			{
 				cout << "Would you like to purchase tickets? (y/n) No Entry Possible at this point." << endl;
 				cin >> purchase;
-
-
 			}
-
 		}
 	// INSERT else (coice == 3)
 
@@ -326,29 +323,27 @@ int main()
 				object.resetSeatMap();
 				cout << "\n\n	THE SEAT MAP HAS SUCCESSFULLY BEEN RESET.\n\n";
 				displayMenu();
+				cin >> choice;
 
 			}
 			else if ((input == 'n') || (input == 'N'))
 			{
-				cout << "\n\n     The seating char was NOT updated, Returning to Main Menu.";
+				cout << "\n\n     Update exited, Please chose an option from the Main menu";
 				displayMenu();
 				cin >> choice;
 			}
 			else
-			{ 
+			{
 				cout << "Invalid input, please enter (y/n):  ";
 				cin >> input;
 			}
 
-		}
 		else (choice == 5)
 		{
 			cout << "		Thank you! Program has exited.";
 		}
 
-
 	return 0;
-
 }
 
 //********************************************************************
