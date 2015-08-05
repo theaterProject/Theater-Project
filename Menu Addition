@@ -5,6 +5,8 @@
 
 using namespace std;
 
+void displayMenu();
+
 //**************************************************************************************************
 // TicketManager Class
 //**************************************************************************************************
@@ -133,6 +135,19 @@ TicketManager::~TicketManager()
 	cout << "The destructor has run!" << endl; //REMOVE BEFORE SUBMITTING - JUST FOR PROGRAM VERIFICATION
 }
 
+//*******************************************************************
+//			DISPLAY MENU FUNCTION
+//******************************************************************
+void displayMenu()
+{
+	cout << "\n             WELCOME TO THE THEATER" << endl;
+	cout << "\n   Please choose an option from the menu below : " << endl;
+	cout << "\n\n             1 -  Seating Chart" << endl;
+	cout << "             2 -  Request Tickets" << endl;
+	cout << "             3 -  Print sales report" << endl;
+	cout << "             4 -  Reset Seat Map and Exit" << endl;
+	cout << "             5 -  Exit\n\n" << endl;
+}
 
 //********************************************************************************
 //       display seatMap function
@@ -223,7 +238,7 @@ int main()
 	//*********** MENU OPTIONS **********
 	int choice = 0;
 
-	while (choice != 4)
+	while (choice != 5)
 	{
 
 		cout << "\n             WELCOME TO THE THEATER" << endl;
@@ -231,65 +246,94 @@ int main()
 		cout << "\n\n             1 -  Seating Chart" << endl;
 		cout << "             2 -  Request Tickets" << endl;
 		cout << "             3 -  Print sales report" << endl;
-		cout << "             4 -  Exit\n\n" << endl;
+		cout << "             4 -  Reset Seat Map" << endl; 
+		cout << "             5 -  Exit\n\n" << endl;
 
 		cout << "\n         MENU CHOICE:  ";
 
 		cin >> choice;
 
-		if ((choice != 1) && (choice != 2) && (choice != 3) && (choice != 4))
+		if ((choice != 1) && (choice != 2) && (choice != 3) && (choice != 4) && (choice != 5))
 		{
 			cout << "\n\n   Invalid option, please enter a valid menu option:  ";
 			cin >> choice;
 		}
 
-	if (choice == 1)
-	{
-		object.displaySeatMapFunction();
-	}
-	else (choice == 2)  //this will kick off what we'd use afte the switch menu number was selected (along with the int requestTickets.)
-	{
-		int rowNumber;
-		int numberOfSeats;                 //Variables for input
-		int startingSeatNumber;
-		int returnMessage;
-
-		cout << "Enter the number of seats you would like to request: " << endl;  //Gather info from user
-		cin >> numberOfSeats;
-		cout << "Enter the row you'd like to request seats from: " << endl;
-		cin >> rowNumber;
-		cout << "Enter the seat number you'd like to start with." << endl;
-		cin >> startingSeatNumber;
-
-		returnMessage = object.ticketRequest(numberOfSeats, rowNumber, startingSeatNumber);
-
-
-		if (returnMessage == 0)
+		if (choice == 1)
 		{
-			cout << "One or more of your seats do not exist. " << endl;
+			object.displaySeatMapFunction();
 		}
-		else if (returnMessage == 1)
+		else (choice == 2)  //this will kick off what we'd use afte the switch menu number was selected (along with the int requestTickets.)
 		{
-			cout << "One or more of your seats are not available. " << endl;
+			int rowNumber;
+			int numberOfSeats;                 //Variables for input
+			int startingSeatNumber;
+			int returnMessage;
+
+			cout << "Enter the number of seats you would like to request: " << endl;  //Gather info from user
+			cin >> numberOfSeats;
+			cout << "Enter the row you'd like to request seats from: " << endl;
+			cin >> rowNumber;
+			cout << "Enter the seat number you'd like to start with." << endl;
+			cin >> startingSeatNumber;
+
+			returnMessage = object.ticketRequest(numberOfSeats, rowNumber, startingSeatNumber);
+
+
+			if (returnMessage == 0)
+			{
+				cout << "One or more of your seats do not exist. " << endl;
+			}
+			else if (returnMessage == 1)
+			{
+				cout << "One or more of your seats are not available. " << endl;
+			}
+			else if (returnMessage == 2)
+			{
+				cout << "Would you like to purchase tickets? No Entry Possible at this point." << endl;
+			}
+
 		}
-		else if (returnMessage == 2)
+	// INSERT else (coice == 3)
+
+		// Exit option
+		else if (choice == 4)
 		{
-			cout << "Would you like to purchase tickets? No Entry Possible at this point." << endl;
+			char input;
+
+			cout << "This will reset the Seat Map, are you sure? (y/n):  ";
+			cin >> input;
+
+			if ((input == 'y') || (input == 'Y'))
+			{
+				object.resetSeatMap();
+				cout << "The seat map has been succesfully reset."
+			}
+			else if ((input == 'n') || (input == 'N'))
+			{
+				displayMenu();
+				cin >> choice;
+			}
+			else
+			{ 
+				cout << "Invalid input, please enter (y/n):  ";
+				cin >> input;
+			}
+
+		}
+		else (choice == 5)
+		{
+			cout << "Thank you! Program will now exit.";
 		}
 
-	}
-	//else (coice == 3)
+
+
 	
+
 
 	//  **********************************************************************************
 	//    MECHANISM TO RESET SEAT MAP TO ALL # *******************************************
-	string reset;
-	cout << "Do you want to reset? Type reset-map if yes:" << endl;
-	cin >> reset;
-	if (reset == "reset-map")
-	{
-		object.resetSeatMap();
-	}
+	
 
 
 	return 0;
