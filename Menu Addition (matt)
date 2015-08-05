@@ -229,16 +229,7 @@ int main()
 	while (choice != 5)
 	{
 
-		cout << "\n             WELCOME TO THE THEATER" << endl;
-		cout << "\n   Please choose an option from the menu below : " << endl;
-		cout << "\n\n             1 -  Seating Chart" << endl;
-		cout << "             2 -  Request Tickets" << endl;
-		cout << "             3 -  Print sales report" << endl;
-		cout << "             4 -  Reset Seat Map" << endl; 
-		cout << "             5 -  Exit\n\n" << endl;
-
-		cout << "\n         MENU CHOICE:  ";
-
+		displayMenu();
 		cin >> choice;
 
 		if ((choice != 1) && (choice != 2) && (choice != 3) && (choice != 4) && (choice != 5))
@@ -257,6 +248,7 @@ int main()
 			int numberOfSeats;                 //Variables for input
 			int startingSeatNumber;
 			int returnMessage;
+			char menuReturn;
 
 			cout << "Enter the number of seats you would like to request: " << endl;  //Gather info from user
 			cin >> numberOfSeats;
@@ -271,14 +263,51 @@ int main()
 			if (returnMessage == 0)
 			{
 				cout << "One or more of your seats do not exist. " << endl;
+				cout << "Return to main menu? (y/n):  ";
+				cin >> menuReturn;
+
+				if ((menuReturn == 'y') || (menuReturn == 'y'))
+				{
+					displayMenu();
+					cin >> choice;
+				}
+				else if ((menuReturn == 'n') || (menuReturn == 'N'))
+				{
+					choice == 5; 
+				}
+				else
+				{
+					cout << "Invalid Input, please enter either 'Y' or 'N'";
+					cin >> menuReturn;
+				}
 			}
 			else if (returnMessage == 1)
 			{
 				cout << "One or more of your seats are not available. " << endl;
+				cout << "Return to main menu? (y/n):  ";
+				cin >> menuReturn;
+
+				if ((menuReturn == 'y') || (menuReturn == 'y'))
+				{
+					displayMenu();
+					cin >> choice;
+				}
+				else if ((menuReturn == 'n') || (menuReturn == 'N'))
+				{
+					(choice == 5);
+				}
+				else
+				{
+					cout << "Invalid Input, please enter either 'Y' or 'N'";
+					cin >> menuReturn;
+				}
 			}
 			else if (returnMessage == 2)
 			{
-				cout << "Would you like to purchase tickets? No Entry Possible at this point." << endl;
+				cout << "Would you like to purchase tickets? (y/n) No Entry Possible at this point." << endl;
+				cin >> purchase;
+
+
 			}
 
 		}
@@ -301,6 +330,7 @@ int main()
 			}
 			else if ((input == 'n') || (input == 'N'))
 			{
+				cout << "\n\n     The seating char was NOT updated, Returning to Main Menu.";
 				displayMenu();
 				cin >> choice;
 			}
@@ -313,17 +343,8 @@ int main()
 		}
 		else (choice == 5)
 		{
-			cout << "Thank you! Program will now exit.";
+			cout << "		Thank you! Program has exited.";
 		}
-
-
-
-	
-
-
-	//  **********************************************************************************
-	//    MECHANISM TO RESET SEAT MAP TO ALL # *******************************************
-	
 
 
 	return 0;
@@ -387,11 +408,15 @@ int TicketManager::ticketRequest(int numberOfSeats, int rowNumber, int startingS
 //******************************************************************
 void displayMenu()
 {
+
 	cout << "\n             WELCOME TO THE THEATER" << endl;
 	cout << "\n   Please choose an option from the menu below : " << endl;
 	cout << "\n\n             1 -  Seating Chart" << endl;
 	cout << "             2 -  Request Tickets" << endl;
 	cout << "             3 -  Print sales report" << endl;
-	cout << "             4 -  Reset Seat Map and Exit" << endl;
+	cout << "             4 -  Reset Seat Map" << endl;
 	cout << "             5 -  Exit\n\n" << endl;
+
+	cout << "\n         MENU CHOICE:  ";
 }
+
