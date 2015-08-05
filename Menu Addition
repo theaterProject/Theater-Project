@@ -307,7 +307,9 @@ int main()
 			if ((input == 'y') || (input == 'Y'))
 			{
 				object.resetSeatMap();
-				cout << "The seat map has been succesfully reset."
+				cout << "\n\n	THE SEAT MAP HAS SUCCESSFULLY BEEN RESET.\n\n";
+				displayMenu();
+
 			}
 			else if ((input == 'n') || (input == 'N'))
 			{
